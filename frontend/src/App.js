@@ -1,14 +1,15 @@
-import react, { useEffect } from "react";
-
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Pedido from './pages/Pedido';
 import RealizeUmSonho from './pages/RealizeUmSonho';
 import Confirmar from './pages/Confirmar';
 
+import 'dotenv/config';
+
 import "./app.css";
 
 function App() {
+  console.log(process.env);
   return <div className="App">
     <Router>
       <Switch>
