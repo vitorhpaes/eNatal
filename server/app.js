@@ -135,6 +135,7 @@ router.post('/api/pedido/setStatus', verifyAuth, async (req, res) => {
 
 app.use(router);
 
-app.listen(3333, () => {
-    console.log(' Aberto na porta 3333 ');
+const port = process.env.HOST_PORT;
+app.listen(port, () => {
+    console.log(`Servidor aberto na porta ${port}`);
 })
