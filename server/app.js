@@ -3,12 +3,8 @@ const cors = require('cors');
 
 const app = express();
 
-const knexFile = require('./knexfile');
-const knex = require('knex')(knexFile.development);
+const knex = require('./database/knex');
 const jwt = require('jsonwebtoken');
-const {
-    jwtauth
-} = require('jsonwebtoken');
 
 require('dotenv/config');
 const bcrypt = require('bcrypt');
