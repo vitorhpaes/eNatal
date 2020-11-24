@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "start": "node app.js",
+    "migrate": "npx knex migrate:latest --env production"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
