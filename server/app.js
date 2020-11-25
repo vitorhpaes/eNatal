@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
@@ -135,7 +136,18 @@ router.post('/api/pedido/setStatus', verifyAuth, async (req, res) => {
 
 app.use(router);
 
+if (process.env.NODE_ENV === 'production') {
+
+    app.use(express.static(path.join(__dirname, '../frontend/build')));
+    app.use(function (req, res) {
+        return res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
+    });
+
+}
+
 const port = process.env.HOST_PORT;
-app.listen(port, () => {
+app.listen(port || 3333, () => {
     console.log(`Servidor aberto na porta ${port}`);
 })
+
+module.exports = app;
