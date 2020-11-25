@@ -29,8 +29,6 @@ function Pedido() {
         <h1>Lages - SC</h1>
       </div>
       <div className="card-pedido">
-        <Link to="/realizeUmSonho">Realize</Link>
-        <Link to="/confirmar">Confirmar</Link>
         {!numeroPedido ? (
           <>
             <textarea
