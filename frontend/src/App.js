@@ -9,7 +9,6 @@ import 'dotenv/config';
 import "./app.css";
 
 function App() {
-  console.log(process.env);
   return <div className="App">
     <Router>
       <Switch>
