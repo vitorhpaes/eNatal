@@ -90,7 +90,8 @@ router.get('/api/pedido', async (req, res) => {
 router.post('/api/pedido', async (req, res) => {
 
     const {
-        pedido
+        pedido,
+        contato
     } = req.body;
 
     if (!pedido) {
@@ -101,7 +102,8 @@ router.post('/api/pedido', async (req, res) => {
     }
 
     const response = await knex('pedido').insert({
-        pedido
+        pedido,
+        contato
     }, 'id');
     const numeroPedido = response[0];
 

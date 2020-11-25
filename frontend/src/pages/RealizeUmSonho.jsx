@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import CardPedido from "../components/CardPedido";
 import api from "../services/api";
@@ -7,7 +7,7 @@ function RealizeUmSonho() {
   const [pedidos, setPedidos] = useState([]);
   const [pedidoId, setPedidoId] = useState("");
 
-  const { isLoading, isFetching, error, data } = useQuery(
+  const { isLoading, isFetching, error } = useQuery(
     ["pedidos", pedidoId],
     fetchPedidos
   );

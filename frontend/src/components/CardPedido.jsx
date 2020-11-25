@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as Fa from "react-icons/fa";
 import api from "../services/api";
+import cogoToast from "cogo-toast";
 
 function CardPedido({ pedido, confirmar, afterChange }) {
   const [link, setLink] = useState("");
@@ -13,10 +14,12 @@ function CardPedido({ pedido, confirmar, afterChange }) {
 
   async function handleConfirmar() {
     await api.post("/pedido/setStatus", { pedidoId: pedido.id, status: 1 });
+    cogoToast.success('Pedido realizado!!');
     if (afterChange) afterChange();
   }
   async function handleDesconfirmar() {
     await api.post("/pedido/setStatus", { pedidoId: pedido.id, status: 0 });
+    cogoToast.success('Desconfirmado!!');
     if (afterChange) afterChange();
   }
 

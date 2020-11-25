@@ -16,6 +16,7 @@ body {
     color: #eee;
     user-select: none;
     align-self: initial;
+    margin-top: -30px;
 }
 
 .title p {
@@ -50,6 +51,7 @@ body {
     width: 100vw;
     z-index: 100;
     display: flex;
+    flex: 1 0 auto;
     height: 100vh;
     position: fixed;
     overflow-y: auto;
@@ -58,6 +60,7 @@ body {
     justify-content: center;
     background-color: rgba(0, 0, 0, .6);
     padding-bottom: 30px;
+    padding-top: 30px;
 }
 
 .flex-start {
@@ -65,7 +68,6 @@ body {
 }
 
 .card-pedido {
-    display: flex;
     padding: 15px 35px;
     background-color: rgba(0, 0, 0, .9);
     border: 1px solid rgba(55, 55, 55, .4);
@@ -73,6 +75,23 @@ body {
     width: 500px;
     margin-top: 30px;
     flex-direction: column;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -ms-flexbox;
+}
+
+.card-pedido input {
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #eee;
+    background: rgba(0, 0, 0, .4);
+    padding: 4px 10px;
+    margin-bottom: 30px;
+    color: #eee;
+    font-size: 18px;
+    width: 100%;
+    border-radius: 2px;
 }
 
 button.btn-envio-pedido {
@@ -224,14 +243,10 @@ input.form-control::placeholder {
     transition: 200ms;
     cursor: pointer;
 }
+
 #login-btn:hover {
-    display: flex;
-    align-items: center;
-    padding: 4px 15px;
     border: 1px solid rgba(30, 80, 30, .6);
     background-color: rgba(30, 140, 30, .8);
-    border-radius: 3px;
-    margin-top: 15px;
 }
 
 #login-btn svg {
@@ -273,6 +288,6 @@ input.form-control::placeholder {
     }
 
     .card-pedido {
-        width: 70vw;
+        width: 90%;
     }
 }

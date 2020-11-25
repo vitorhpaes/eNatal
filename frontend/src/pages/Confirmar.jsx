@@ -22,7 +22,7 @@ function RealizeUmSonho() {
 
     setAuth(stored);
     api.defaults.headers.Authorization = stored;
-  });
+  }, []);
 
   async function handleLogin() {
     const { hide } = cogo.loading("Fazendo login");
