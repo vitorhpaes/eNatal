@@ -32,8 +32,12 @@ function CardPedido({ pedido, confirmar, afterChange }) {
         {pedido.pedido}
         {showContato && (
           <div className="contato">
+            {pedido.nome
+            && <> - Nome: {pedido.nome}<br/></>}
+            {pedido.endereco
+            && <> - Endereco: {pedido.endereco}<br/></>}
             {pedido.contato
-              ? `Contato: ${pedido.contato}`
+              ? <> - Contato: {pedido.contato}<br/></>
               : "Contato não informado... Fale conosco!"}
           </div>
         )}
