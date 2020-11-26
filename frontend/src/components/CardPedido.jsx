@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import * as Fi from "react-icons/fi";
 import * as Fa from "react-icons/fa";
 import api from "../services/api";
 import cogoToast from "cogo-toast";
 
 function CardPedido({ pedido, confirmar, afterChange }) {
   const [link, setLink] = useState("");
+  const [showContato, setShowContato] = useState(false);
 
   useEffect(() => {
     const number = "5547999254473";
@@ -14,19 +16,28 @@ function CardPedido({ pedido, confirmar, afterChange }) {
 
   async function handleConfirmar() {
     await api.post("/pedido/setStatus", { pedidoId: pedido.id, status: 1 });
-    cogoToast.success('Pedido realizado!!');
+    cogoToast.success("Pedido realizado!!");
     if (afterChange) afterChange();
   }
   async function handleDesconfirmar() {
     await api.post("/pedido/setStatus", { pedidoId: pedido.id, status: 0 });
-    cogoToast.success('Desconfirmado!!');
+    cogoToast.success("Desconfirmado!!");
     if (afterChange) afterChange();
   }
 
   return (
     <div className={`card-pedido ${pedido.status ? "resolvido" : ""}`}>
       <div className="card-header">Pedido nº {pedido.id}</div>
-      <div className="card-body">{pedido.pedido}</div>
+      <div className="card-body">
+        {pedido.pedido}
+        {showContato && (
+          <div className="contato">
+            {pedido.contato
+              ? `Contato: ${pedido.contato}`
+              : "Contato não informado... Fale conosco!"}
+          </div>
+        )}
+      </div>
       <div className="card-footer">
         {!confirmar && (
           <>
@@ -42,7 +53,7 @@ function CardPedido({ pedido, confirmar, afterChange }) {
                   "Pedido realizado!"
                 ) : (
                   <>
-                    <Fa.FaWhatsapp /> Realizar!!
+                    <Fa.FaWhatsapp /> Fale conosco!!
                   </>
                 )}
               </a>
@@ -55,10 +66,18 @@ function CardPedido({ pedido, confirmar, afterChange }) {
           </>
         )}
 
+        <div
+          className={`btn-resolver-pedido`}
+          onClick={() => setShowContato(!showContato)}
+        >
+          <Fi.FiPhone /> Contato
+        </div>
+
         {confirmar && !pedido.status && (
-          <button className="btn-resolver-pedido" onClick={handleConfirmar}>
+          <div className="btn-resolver-pedido" onClick={handleConfirmar}>
+            <Fi.FiCheck/>
             Confirmar realização
-          </button>
+          </div>
         )}
         {confirmar && !!pedido.status && pedido.status > 0 && (
           <button

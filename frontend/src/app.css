@@ -94,11 +94,13 @@ body {
     border-radius: 2px;
 }
 
-button.btn-envio-pedido {
+.btn-envio-pedido {
+    display: flex;
+    align-items: center;
     background-color: rgba(180, 30, 30, .7);
     border: 1px solid rgba(140, 30, 30, .8);
     width: max-content;
-    padding: 7px 20px;
+    padding: 4px 20px;
     border-radius: 2px;
     outline: none;
     color: #eee;
@@ -109,7 +111,7 @@ button.btn-envio-pedido {
     transition: 200ms;
 }
 
-button.btn-envio-pedido:hover {
+.btn-envio-pedido:hover {
     background-color: rgba(140, 30, 30, .7);
     border: 1px solid rgba(80, 30, 30, .8);
 }
@@ -144,6 +146,7 @@ button.btn-envio-pedido:hover {
 }
 
 button svg,
+div svg,
 a svg {
     font-size: 20px;
     margin-right: 5px;
@@ -177,10 +180,23 @@ a svg {
     color: #eee;
 }
 
+.pedidos-feitos {
+    text-align: center;
+    padding: 8px 0;
+    font-size: 18px;
+}
+
 .card-pedido {
     border: 1px solid rgba(80, 30, 30, .8);
     background-color: rgba(0, 0, 0, .7);
     border-radius: 3px;
+}
+
+.card-pedido .contato {
+    border-top: 1px solid #888;
+    padding: 12px 10px 4px 10px;
+    margin: 10px 15px 0 15px;
+    text-align: center;
 }
 
 .card-header {
@@ -194,9 +210,10 @@ a svg {
 }
 
 .card-footer {
-    margin-top: 15px;
+    margin-top: 5px;
     border-top: 1px solid #eee;
     display: flex;
+    flex-wrap: wrap;
 }
 
 input.form-control {

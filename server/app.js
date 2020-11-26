@@ -74,13 +74,15 @@ router.get('/api/pedido', async (req, res) => {
     const id = pedidoId;
 
     const select = knex().select()
-        .from('pedido as p');
+        .from('pedido as p')
 
     if (id) {
         select.where('id', id);
     } else {
         select.orderBy('status');
     }
+    select.orderBy('id', 'desc');
+    select.groupBy('pedido');
 
     const results = await select;
     res.json(results);

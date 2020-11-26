@@ -1,32 +1,54 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import api from "../services/api";
 import cogo from "cogo-toast";
+import * as Fi from 'react-icons/fi';
 
-function Pedido() {
+function Pedido({ history }) {
   const [pedido, setPedido] = useState("");
   const [contato, setContato] = useState("");
-  const [numeroPedido, setNumeroPedido] = useState(false);
+  const [pedidos, setPedidos] = useState([]);
+  const [pedidoAtual, setPedidoAtual] = useState(false);
 
   useEffect(() => {
-    const numPedido = localStorage.getItem("numeroPedido");
-    // setNumeroPedido(numPedido);
+    const stored = localStorage.getItem("pedidos");
+    const pedidos = stored ? JSON.parse(stored) : [];
+    setPedidos(pedidos);
   }, []);
 
-  function setNumeroPedidoLocal(num) {
-    localStorage.setItem("numeroPedido", num);
-    setNumeroPedido(num);
+  function setPedidosLocal(num) {
+    const stored = localStorage.getItem("pedidos");
+    const numeroPedidos = stored ? JSON.parse(stored) : [];
+
+    numeroPedidos.push(num);
+    setPedidoAtual(num);
+
+    localStorage.setItem("pedidos", JSON.stringify(numeroPedidos));
+    setPedidos(numeroPedidos);
+  }
+
+  function acompanharPedidos() {
+    cogo.success(
+      "Para acompanhar os seus pedidos, digite o código na caixa abaixo e verifique se ele foi realizado!!",
+      {
+        hideAfter: 10,
+      }
+    );
+    return history.push("/realizeUmSonho");
   }
 
   async function enviarPedido() {
     try {
       const response = await api.post("/pedido", { pedido, contato });
       const { numero } = response.data;
-      setNumeroPedidoLocal(numero);
-    } catch {
-      cogo.error("Erro ao realizar pedido.. você pode tentar novamente daqui a pouco. Uma dica? Copie o seu pedido para colar quando estiver de volta!", {
-        hideAfter: 10000,
-      });
+      setPedidosLocal(numero);
+    } catch (e) {
+      console.log(e);
+      cogo.error(
+        "Erro ao realizar pedido.. você pode tentar novamente daqui a pouco. Uma dica? Copie o seu pedido para colar quando estiver de volta!",
+        {
+          hideAfter: 10000,
+        }
+      );
     }
   }
 
@@ -37,7 +59,16 @@ function Pedido() {
         <h1>Lages - SC</h1>
       </div>
       <div className="card-pedido">
-        {!numeroPedido ? (
+        {pedidos.length > 0 && (
+          <div className="pedidos-feitos">
+            Números de pedidos seus:{" "}
+            {pedidos.map((ped, index) => {
+              return pedidos.length - 1 == index ? ped : `${ped}, `;
+            })}
+          </div>
+        )}
+
+        {!pedidoAtual ? (
           <>
             <input
               onChange={(e) => setContato(e.target.value)}
@@ -48,12 +79,18 @@ function Pedido() {
               className="caixa"
               placeholder="Digite seu pedido aqui"
               onChange={(e) => setPedido(e.target.value)}
-            >
-              {pedido}
-            </textarea>
-            <button className="btn-envio-pedido" onClick={enviarPedido}>
+              value={pedido}
+            />
+            {pedidos.length > 0 && (
+              <div class="btn-resolver-pedido" onClick={acompanharPedidos}>
+                <Fi.FiEye size={18}/>
+                Acompanhar os meus pedidos
+              </div>
+            )}
+            <div className="btn-envio-pedido" onClick={enviarPedido}>
+              <Fi.FiSend size={18}/>
               Enviar pedido!
-            </button>
+            </div>
           </>
         ) : (
           <div className="show-numero-pedido">
@@ -65,7 +102,7 @@ function Pedido() {
               Você também pode consultar a partir do número do seu pedido!!
               <br />
               <br />
-              <center>Número: {numeroPedido}</center>
+              <center>Número: {pedidoAtual}</center>
             </h2>
           </div>
         )}
