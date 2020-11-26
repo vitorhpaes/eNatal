@@ -87,7 +87,7 @@ body {
     border-bottom: 1px solid #eee;
     background: rgba(0, 0, 0, .4);
     padding: 4px 10px;
-    margin-bottom: 30px;
+    margin-bottom: 5px;
     color: #eee;
     font-size: 18px;
     width: 100%;
@@ -163,6 +163,7 @@ a svg {
     color: #eee;
     font-family: 'Dancing Script', cursive !important;
     font-size: 25px;
+    margin-top: 10px;
 }
 
 .caixa::placeholder {
@@ -184,6 +185,28 @@ a svg {
     text-align: center;
     padding: 8px 0;
     font-size: 18px;
+}
+
+.facebook-button {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: auto;
+    padding: 5px 19px;
+    margin-top: 2px;
+    background-color: #4c69ba;
+    border: none;
+    border-radius: 2px;
+    color: #eee;
+    font-size: 18px;
+    font-family: 'Dancing Script', cursive !important;
+    transition: 200ms;
+}
+.facebook-button:hover {
+    background-color: #2b44dd;
+}
+.facebook-button:focus {
+    outline: none;
 }
 
 .card-pedido {

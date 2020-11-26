@@ -1,19 +1,28 @@
 import React, { useState, useEffect } from "react";
 import api from "../services/api";
 import cogo from "cogo-toast";
-import * as Fi from 'react-icons/fi';
+import * as Fi from "react-icons/fi";
+import * as Fa from "react-icons/fa";
+import FacebookLogin from "react-facebook-login";
 
 function Pedido({ history }) {
   const [pedido, setPedido] = useState("");
   const [contato, setContato] = useState("");
   const [pedidos, setPedidos] = useState([]);
   const [pedidoAtual, setPedidoAtual] = useState(false);
+  const [facebookLogin, setFacebookLogin] = useState(false);
 
-  useEffect(() => {
-    const stored = localStorage.getItem("pedidos");
-    const pedidos = stored ? JSON.parse(stored) : [];
-    setPedidos(pedidos);
-  }, []);
+  function facebookLoginStore(res) {
+    const login = JSON.stringify(res);
+    localStorage.setItem("facebookLogin", login);
+    setFacebookLogin(res);
+  }
+
+  function getFacebookStored() {
+    const stored = localStorage.getItem("facebookLogin");
+    const faceLogin = JSON.parse(stored);
+    setFacebookLogin(faceLogin);
+  }
 
   function setPedidosLocal(num) {
     const stored = localStorage.getItem("pedidos");
@@ -26,6 +35,12 @@ function Pedido({ history }) {
     setPedidos(numeroPedidos);
   }
 
+  function getPedidosStored() {
+    const stored = localStorage.getItem("pedidos");
+    const pedidos = stored ? JSON.parse(stored) : [];
+    setPedidos(pedidos);
+  }
+
   function acompanharPedidos() {
     cogo.success(
       "Para acompanhar os seus pedidos, digite o código na caixa abaixo e verifique se ele foi realizado!!",
@@ -36,9 +51,14 @@ function Pedido({ history }) {
     return history.push("/realizeUmSonho");
   }
 
+  useEffect(() => {
+    getPedidosStored();
+    getFacebookStored();
+  }, []);
+
   async function enviarPedido() {
     try {
-      const response = await api.post("/pedido", { pedido, contato });
+      const response = await api.post("/pedido", { pedido, contato, facebook: facebookLogin });
       const { numero } = response.data;
       setPedidosLocal(numero);
     } catch (e) {
@@ -63,7 +83,7 @@ function Pedido({ history }) {
           <div className="pedidos-feitos">
             Números de pedidos seus:{" "}
             {pedidos.map((ped, index) => {
-              return pedidos.length - 1 == index ? ped : `${ped}, `;
+              return pedidos.length - 1 === index ? ped : `${ped}, `;
             })}
           </div>
         )}
@@ -75,6 +95,17 @@ function Pedido({ history }) {
               value={contato}
               placeholder="Uma forma de contato"
             />
+            {!facebookLogin && (
+              <FacebookLogin
+                appId="385683872863228"
+                autoLoad={false}
+                cssClass="facebook-button"
+                fields="name, email, picture"
+                textButton="Login"
+                icon={<Fa.FaFacebookSquare />}
+                callback={(n) => facebookLoginStore(n)}
+              />
+            )}
             <textarea
               className="caixa"
               placeholder="Digite seu pedido aqui"
@@ -83,12 +114,12 @@ function Pedido({ history }) {
             />
             {pedidos.length > 0 && (
               <div class="btn-resolver-pedido" onClick={acompanharPedidos}>
-                <Fi.FiEye size={18}/>
+                <Fi.FiEye size={18} />
                 Acompanhar os meus pedidos
               </div>
             )}
             <div className="btn-envio-pedido" onClick={enviarPedido}>
-              <Fi.FiSend size={18}/>
+              <Fi.FiSend size={18} />
               Enviar pedido!
             </div>
           </>
