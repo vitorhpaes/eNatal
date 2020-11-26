@@ -92,27 +92,11 @@ router.get('/api/pedido', async (req, res) => {
 router.post('/api/pedido', async (req, res) => {
 
     const {
+        nome,
+        endereco,
         pedido,
-        contato,
-        facebook
+        contato
     } = req.body;
-
-    facebookUser = !!facebook;
-    if (facebook) {
-        const result = await knex('facebook_user').column('id').where('userId', facebook.userID);
-        facebookUser = result[0] ? result[0].id : false;
-
-        if (!facebookUser) {
-            const [id] = await knex('facebook_user').insert({
-                userId: facebook.userID,
-                name: facebook.name,
-                email: facebook.email,
-                profile_pic: JSON.stringify(facebook.picture),
-            });
-            facebookUser = id;
-        }
-
-    }
 
     if (!pedido) {
         res.json({
@@ -122,9 +106,10 @@ router.post('/api/pedido', async (req, res) => {
     }
 
     const response = await knex('pedido').insert({
+        nome,
+        endereco,
         pedido,
-        contato,
-        facebook_user_id: facebookUser ? facebookUser : null
+        contato
     }, 'id');
     const numeroPedido = response[0];
 

@@ -2,31 +2,21 @@ import React, { useState, useEffect } from "react";
 import api from "../services/api";
 import cogo from "cogo-toast";
 import * as Fi from "react-icons/fi";
-import * as Fa from "react-icons/fa";
-import FacebookLogin from "react-facebook-login";
 
 function Pedido({ history }) {
-  const [pedido, setPedido] = useState("");
+  const [nome, setNome] = useState("");
+  const [endereco, setEndereco] = useState("");
   const [contato, setContato] = useState("");
+  const [pedido, setPedido] = useState("");
+
   const [pedidos, setPedidos] = useState([]);
   const [pedidoAtual, setPedidoAtual] = useState(false);
-  const [facebookLogin, setFacebookLogin] = useState(false);
-
-  function facebookLoginStore(res) {
-    const login = JSON.stringify(res);
-    localStorage.setItem("facebookLogin", login);
-    setFacebookLogin(res);
-  }
-
-  function getFacebookStored() {
-    const stored = localStorage.getItem("facebookLogin");
-    const faceLogin = JSON.parse(stored);
-    setFacebookLogin(faceLogin);
-  }
 
   function setPedidosLocal(num) {
     const stored = localStorage.getItem("pedidos");
     const numeroPedidos = stored ? JSON.parse(stored) : [];
+
+    if(!num) return false;
 
     numeroPedidos.push(num);
     setPedidoAtual(num);
@@ -41,6 +31,25 @@ function Pedido({ history }) {
     setPedidos(pedidos);
   }
 
+  function getDadosStored() {
+    const stored = localStorage.getItem("person-data");
+    if (!stored) return false;
+    const { nome, endereco, contato } = JSON.parse(stored);
+    setNome(nome);
+    setEndereco(endereco);
+    setContato(contato);
+  }
+
+  function storeDados() {
+    const data = {
+      nome: nome ? nome : "",
+      endereco: endereco ? endereco : "",
+      contato: contato ? contato : "",
+    };
+    localStorage.setItem("person-data", JSON.stringify(data));
+    return;
+  }
+
   function acompanharPedidos() {
     cogo.success(
       "Para acompanhar os seus pedidos, digite o código na caixa abaixo e verifique se ele foi realizado!!",
@@ -51,18 +60,18 @@ function Pedido({ history }) {
     return history.push("/realizeUmSonho");
   }
 
-  useEffect(() => {
-    getPedidosStored();
-    getFacebookStored();
-  }, []);
-
   async function enviarPedido() {
     try {
-      const response = await api.post("/pedido", { pedido, contato, facebook: facebookLogin });
+      storeDados();
+      const response = await api.post("/pedido", {
+        nome, 
+        endereco,
+        pedido,
+        contato,
+      });
       const { numero } = response.data;
       setPedidosLocal(numero);
     } catch (e) {
-      console.log(e);
       cogo.error(
         "Erro ao realizar pedido.. você pode tentar novamente daqui a pouco. Uma dica? Copie o seu pedido para colar quando estiver de volta!",
         {
@@ -71,6 +80,11 @@ function Pedido({ history }) {
       );
     }
   }
+
+  useEffect(() => {
+    getPedidosStored();
+    getDadosStored();
+  }, []);
 
   return (
     <div className="hover">
@@ -91,21 +105,20 @@ function Pedido({ history }) {
         {!pedidoAtual ? (
           <>
             <input
+              onChange={(e) => setNome(e.target.value)}
+              value={nome}
+              placeholder="Seu nome"
+            />
+            <input
+              onChange={(e) => setEndereco(e.target.value)}
+              value={endereco}
+              placeholder="Endereço"
+            />
+            <input
               onChange={(e) => setContato(e.target.value)}
               value={contato}
               placeholder="Uma forma de contato"
             />
-            {!facebookLogin && (
-              <FacebookLogin
-                appId="385683872863228"
-                autoLoad={false}
-                cssClass="facebook-button"
-                fields="name, email, picture"
-                textButton="Login"
-                icon={<Fa.FaFacebookSquare />}
-                callback={(n) => facebookLoginStore(n)}
-              />
-            )}
             <textarea
               className="caixa"
               placeholder="Digite seu pedido aqui"
